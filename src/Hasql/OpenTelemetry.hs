@@ -13,10 +13,10 @@ import Hasql.Api qualified as Api
 import OpenTelemetry.Attributes (Attribute, ToAttribute (..))
 import OpenTelemetry.Trace.Core (SpanArguments (..), SpanKind (Client))
 import OpenTelemetry.Trace.Monad (MonadTracer (getTracer), inSpan)
-import UnliftIO (MonadIO (liftIO), MonadUnliftIO, UnliftIO (unliftIO))
+import UnliftIO (MonadIO, MonadUnliftIO)
 
 newtype Traced s m a = Traced (ReaderT [(Text, Attribute)] m a)
-  deriving (Functor, Applicative, Monad, MonadTrans)
+  deriving (Functor, Applicative, Monad, MonadTrans, MonadIO, MonadUnliftIO)
 
 instance (MonadTracer m) => MonadTracer (Traced s m) where
   getTracer = lift getTracer
