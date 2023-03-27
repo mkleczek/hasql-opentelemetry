@@ -2,10 +2,10 @@ cabal-version:      2.4
 name:               hasql-opentelemetry
 version:            0.1.0.0
 license:            MIT
-copyright:          2022 Sridhar Ratnakumar
-maintainer:         srid@srid.ca
-author:             Sridhar Ratnakumar
-category:           Web
+copyright:          2023 Michal Kleczek
+maintainer:         michal@kleczek.org
+author:             Michal Kleczek
+category:           Database
 
 -- TODO: Before hackage release.
 -- A short (one-line) description of the package.
@@ -24,13 +24,8 @@ extra-source-files:
 common shared
   ghc-options:
     -Wall -Wincomplete-record-updates -Wincomplete-uni-patterns
-    -Wmissing-deriving-strategies -Wunused-foralls -Wunused-foralls
+    -Wunused-foralls -Wunused-foralls -Wno-orphans
     -fprint-explicit-foralls -fprint-explicit-kinds
-
-  mixins:
-    base hiding (Prelude),
-    relude (Relude as Prelude, Relude.Container.One),
-    relude
 
   default-extensions:
     NoStarIsType
@@ -74,23 +69,24 @@ common shared
     ViewPatterns
 
   build-depends:
-    , aeson
-    , async
-    , base          >=4.13.0.0 && <4.18.0.0.0
-    , data-default
-    , directory
-    , filepath
-    , mtl
-    , optics-core
-    , profunctors
-    , relude        >=1.0
-    , shower
-    , time
-    , with-utf8
+    , base
+    , hasql
+    , hasql-api
+    , hasql-transaction
+    , bytestring
+    , transformers
+    , unliftio
+    , hs-opentelemetry-api
+    , postgresql-libpq
+    , text
+    , iproute
 
   hs-source-dirs:     src
   default-language:   Haskell2010
 
-executable hasql-opentelemetry
+library
   import:  shared
-  main-is: Main.hs
+  exposed-modules:
+    Hasql.OpenTelemetry
+    Hasql.OpenTelemetry.Session
+    Hasql.OpenTelemetry.Transaction

@@ -8,6 +8,8 @@
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     flake-root.url = "github:srid/flake-root";
     mission-control.url = "github:Platonic-Systems/mission-control";
+    hasql-api.url = "github:mkleczek/hasql-api";
+    hasql-transaction.url = "github:mkleczek/hasql-transaction";
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
@@ -24,7 +26,10 @@
         # has only one.
         haskellProjects.main = {
           # packages.hasql-opentelemetry.root = ./.;  # Auto-discovered by haskell-flake
-          overrides = self: super: { };
+          overrides = self: super: with pkgs.haskell.lib; {
+            hasql-api = dontCheck (self.callCabal2nix "hasql-api" inputs.hasql-api { });
+            hasql-transaction = dontCheck (self.callCabal2nix "hasql-transaction" inputs.hasql-transaction { });
+          };
           devShell = {
             tools = hp: {
               treefmt = config.treefmt.build.wrapper;
