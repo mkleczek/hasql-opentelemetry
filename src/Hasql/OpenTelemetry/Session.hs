@@ -10,13 +10,13 @@ import Data.Text.Encoding (decodeUtf8)
 import Database.PostgreSQL.LibPQ qualified as LibPQ
 import Hasql.Connection (Connection, withLibPQConnection)
 import Hasql.OpenTelemetry
-import Hasql.Session qualified
+import Hasql.Session qualified as S
 import Hasql.Statement (Statement (..))
 import OpenTelemetry.Attributes (ToAttribute (..))
 import OpenTelemetry.Resource ((.=), (.=?))
 import Text.Read (readMaybe)
 
-type Session = Traced Statement Hasql.Session.Session
+type Session = Traced Statement S.Session
 
 instance ToAttr Statement where
   toAttr (Statement q _ _ _) = toAttribute $ decodeUtf8 q
